@@ -1,8 +1,12 @@
 ---
 interface Props {
   title?: string;
+  description?: string;
 }
-const { title = "The Walsh Standard — Premium Cleaning, Cotswolds & Bristol" } = Astro.props;
+const { 
+    title = "The Walsh Standard — Premium Cleaning, Cotswolds & Bristol" 
+    description = "Premium residential cleaning for discerning homes across the South Cotswolds and North Bristol. Serving Tetbury, Cirencester, Stroud, Clifton, Henleaze and surrounding areas."
+    } = Astro.props;
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -10,6 +14,22 @@ const { title = "The Walsh Standard — Premium Cleaning, Cotswolds & Bristol" }
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <!-- Local SEO -->
+  <meta name="geo.region" content="GB-ENG" />
+  <meta name="geo.placename" content="Cotswolds and Bristol" />
+
+  <!-- Open Graph (WhatsApp, Facebook previews) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.thewalshstandard.com/" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://www.thewalshstandard.com/" />
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
