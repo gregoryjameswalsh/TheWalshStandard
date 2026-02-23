@@ -188,11 +188,13 @@ import Layout from '../layouts/Layout.astro';
       <span class="label reveal">Get in Touch</span>
       <h2 class="heading reveal">Ready to raise<br/>the <em>standard?</em></h2>
       <p class="reveal">Leave your email and we'll be in touch within 24 hours to arrange a complimentary, no-obligation consultation.</p>
-      <form class="cta-form reveal" id="cta-form">
-        <input type="email" placeholder="Your email address" required />
-        <button type="submit">Book a Call</button>
-      </form>
-      <p class="cta-note reveal">Or email us directly at hello@thewalshstandard.com</p>
+<form class="cta-form reveal" id="cta-form">
+  <input type="hidden" name="access_key" value="5d3965b0-6104-489f-96d2-2bf56f7ef9ef" />
+  <input type="hidden" name="subject" value="New Enquiry — The Walsh Standard" />
+  <input type="email" name="email" placeholder="Your email address" required />
+  <button type="submit">Book a Call</button>
+</form>
+<p class="cta-note reveal" id="form-message"></p>
     </div>
   </section>
 
@@ -512,15 +514,29 @@ import Layout from '../layouts/Layout.astro';
 
 <script>
   const form = document.getElementById('cta-form') as HTMLFormElement;
-  form?.addEventListener('submit', (e) => {
+  const msg = document.getElementById('form-message') as HTMLElement;
+
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = form.querySelector('button') as HTMLButtonElement;
-    btn.textContent = "We'll be in touch ✓";
-    btn.style.background = 'var(--accent-light)';
-    setTimeout(() => {
-      btn.textContent = 'Book a Call';
-      btn.style.background = '';
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    const data = new FormData(form);
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      body: data
+    });
+
+    if (res.ok) {
+      btn.textContent = "We'll be in touch ✓";
+      btn.style.background = 'var(--accent-light)';
+      msg.textContent = 'Thank you — expect to hear from us within 24 hours.';
+      msg.style.color = 'var(--accent-light)';
       form.reset();
-    }, 4000);
+    } else {
+      btn.textContent = 'Something went wrong';
+      btn.disabled = false;
+    }
   });
 </script>
