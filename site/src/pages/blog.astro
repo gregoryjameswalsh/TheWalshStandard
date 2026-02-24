@@ -1,0 +1,36 @@
+
+---
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog");
+const sorted = posts.sort((a, b) => 
+  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+---
+
+<Layout title="Journal — The Walsh Standard">
+  <section class="section" style="max-width:900px;margin:0 auto;">
+    <span class="label">Journal</span>
+    <h1 class="heading">Insights from <em>The Walsh Standard</em></h1>
+
+    <div style="margin-top:3rem;display:flex;flex-direction:column;gap:2.5rem;">
+
+      {sorted.map(post => (
+        <a href={`/blog/${post.slug}`} style="text-decoration:none;color:inherit;">
+          <div style="padding-bottom:1.2rem;border-bottom:1px solid var(--rule);">
+            <h2 style="font-weight:300;font-size:1.8rem;">{post.data.title}</h2>
+            <p style="color:var(--mid);font-size:0.9rem;margin:0.5rem 0;">
+              {post.data.description}
+            </p>
+            <span style="font-size:0.75rem;color:var(--light);letter-spacing:0.1em;">
+              {new Date(post.data.date).toLocaleDateString("en-GB")}
+            </span>
+          </div>
+        </a>
+      ))}
+
+    </div>
+  </section>
+</Layout>
+``

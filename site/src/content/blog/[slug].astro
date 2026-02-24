@@ -1,0 +1,28 @@
+
+---
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog");
+const post = posts.find(p => p.slug === Astro.params.slug);
+
+if (!post) throw new Error("Post not found");
+---
+
+<Layout title={post.data.title} description={post.data.description}>
+  <section class="section" style="max-width:750px;margin:0 auto;">
+    <span class="label">Journal</span>
+    <h1 class="heading">{post.data.title}</h1>
+    <p style="color:var(--light);font-size:0.8rem;margin-top:0.5rem;">
+      {new Date(post.data.date).toLocaleDateString("en-GB")}
+    </p>
+
+    {post.data.heroImage && (
+      <img src={post.data.heroImage} alt="" style="margin:2rem 0;border-radius:6px;" />
+    )}
+
+    <article class="prose" style="margin-top:2rem;line-height:1.8;color:var(--mid);">
+      <Markdown content={post.body} />
+    </article>
+  </section>
+</Layout>
